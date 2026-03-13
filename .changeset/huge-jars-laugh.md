@@ -1,0 +1,5 @@
+---
+"maskot": minor
+---
+
+First publication
