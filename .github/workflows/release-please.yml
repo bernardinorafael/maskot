@@ -1,36 +1,35 @@
-name: Release Please
+name: Release
 
 on:
   push:
     branches: ["master"]
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
-  release-please:
+  release:
     runs-on: ubuntu-latest
     steps:
-      - uses: googleapis/release-please-action@v4
-        id: release
-        with:
-          release-type: node
-          package-name: maskot
       - uses: actions/checkout@v4
-        if: ${{ steps.release.outputs.release_created }}
       - uses: pnpm/action-setup@v4
-        if: ${{ steps.release.outputs.release_created }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           registry-url: "https://registry.npmjs.org"
-        if: ${{ steps.release.outputs.release_created }}
+          cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-        if: ${{ steps.release.outputs.release_created }}
-      - run: pnpm build
-        if: ${{ steps.release.outputs.release_created }}
-      - run: npm publish
+      - name: Create Release Pull Request or Publish
+        uses: changesets/action@v1
+        with:
+          publish: pnpm release
+          version: pnpm version-packages
+          commit: "chore: version packages"
+          title: "chore: version packages"
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-        if: ${{ steps.release.outputs.release_created }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

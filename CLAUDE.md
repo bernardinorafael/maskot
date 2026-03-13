@@ -56,4 +56,8 @@ TypeScript declarations generated via `vite-plugin-dts`.
 
 ## Release
 
-Automated via `release-please` GitHub Action on push to `master`. It manages versioning, CHANGELOG.md, and npm publish.
+Managed via [Changesets](https://github.com/changesets/changesets). Workflow:
+
+1. `pnpm changeset` — create a changeset describing the change and semver bump
+2. Push to `master` — the GitHub Action opens a "Version Packages" PR that bumps versions and updates CHANGELOG.md
+3. Merging the PR triggers `pnpm release` which builds and publishes to npm
