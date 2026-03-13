@@ -3,6 +3,7 @@
 	"version": "1.0.0",
 	"description": "Zero-dependency, framework-agnostic input masking library with custom tokens, multi-pattern support, and type-safe presets",
 	"type": "module",
+	"packageManager": "pnpm@10.11.0",
 	"license": "MIT",
 	"main": "dist/index.cjs",
 	"module": "dist/index.js",
